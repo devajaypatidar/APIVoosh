@@ -1,6 +1,21 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const passport = require('passport');
+
+const googleLogin = passport.authenticate('google',{scope:['profile','email']})
+
+const googleCallback = passport.authenticate('google',{
+  failureRedirect:'/login'
+},
+(req,res)=>{
+  res.json({message:"you are logged"});
+})
+
+const logout = (req, res)=>{
+  req.logout();
+  res.json({message:"you are logged out"});
+}
 
 const registerController = async (req, res, next) => {
     try {
@@ -59,4 +74,7 @@ const registerController = async (req, res, next) => {
   module.exports = {
     registerController,
     loginController,
+    googleLogin,
+  googleCallback,
+  logout
   }

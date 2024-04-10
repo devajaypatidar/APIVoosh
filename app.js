@@ -7,8 +7,21 @@ const profileRoutes = require('./routes/profileRoutes');
 const isAdmin = require('./middleware/isAdmin');
 const app = express();
 const verifyToken  = require('./middleware/auth');
+const passport = require('passport');
+const session = require('express-session');
 
 app.use(bodyParser.json());
+
+app.use(session({
+  secret: 'I does not have a secret to reveal',
+  resave: false,
+  saveUninitialized: false
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('Connected to MongoDB'))
